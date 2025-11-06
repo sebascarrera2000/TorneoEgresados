@@ -48,7 +48,7 @@ export const Register = () => {
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/sports");
+        const res = await fetch("https://torneoegresados.onrender.com/api/sports");
         const data = await res.json();
         setSports(data);
       } catch (err) {
@@ -152,7 +152,7 @@ export const Register = () => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:4000/api/teams", {
+      const response = await fetch("https://torneoegresados.onrender.com/api/teams", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
