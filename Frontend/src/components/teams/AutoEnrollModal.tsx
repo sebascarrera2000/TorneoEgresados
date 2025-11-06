@@ -103,7 +103,7 @@ export const AutoEnrollModal = ({ sports, onClose }) => {
         sport: formData.sportId, // 👈 aseguramos que se envía el ObjectId real
       };
 
-      const res = await fetch("http://localhost:4000/api/teams/auto-enroll", {
+      const res = await fetch("https://torneoegresados.onrender.com/api/teams/auto-enroll", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
