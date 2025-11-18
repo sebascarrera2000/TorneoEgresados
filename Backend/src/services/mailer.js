@@ -188,7 +188,7 @@ export const sendMail = async (to, subject, html) => {
           "api-191D60BF578441BF9E8AA6BAC01990A3",
       },
       body: JSON.stringify({
-        sender: process.env.MAIL_FROM_ADDR || "egresados@umariana.edu.co",
+        sender:"egresados@umariana.edu.co",
         to: [to],
         subject,
         html_body: html,
