@@ -2,364 +2,388 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Sports API - Egresado Leyendas",
-    "version": "1.1.0",
-    "description": "CRUD de Deportes y Equipos, Auto-Matrícula y correos (Gmail Nodemailer)."
+    "version": "2.3.0",
+    "description": "API para Deportes, Equipos, Partidos, Marcadores y Torneo Eliminatorio de Microfútbol."
   },
   "servers": [
-    {
-      "url": "http://localhost:4000"
-    }
+    { "url": "http://localhost:4000" }
   ],
   "paths": {
     "/api/sports": {
       "get": {
         "summary": "Listar deportes",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "responses": { "200": { "description": "OK" } }
       },
       "post": {
         "summary": "Crear deporte",
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Sport"
-              }
-            }
-          }
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Sport" } } }
         },
-        "responses": {
-          "201": {
-            "description": "Creado"
-          }
-        }
+        "responses": { "201": { "description": "Creado" } }
       }
     },
+
     "/api/sports/{id}": {
       "get": {
         "summary": "Obtener deporte",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "No encontrado"
-          }
-        }
+        "responses": { "200": { "description": "OK" }, "404": { "description": "No encontrado" } }
       },
       "put": {
         "summary": "Actualizar deporte",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Sport"
-              }
-            }
-          }
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Sport" } } }
         },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "responses": { "200": { "description": "Actualizado" } }
       },
       "delete": {
         "summary": "Eliminar deporte",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
-        "responses": {
-          "200": {
-            "description": "Eliminado"
-          }
-        }
+        "responses": { "200": { "description": "Eliminado" } }
       }
     },
+
     "/api/teams": {
-      "get": {
-        "summary": "Listar equipos",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
+      "get": { "summary": "Listar equipos", "responses": { "200": { "description": "OK" } } },
       "post": {
-        "summary": "Crear equipo (envía correo al capitán)",
+        "summary": "Crear equipo",
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TeamCreate"
-              }
-            }
-          }
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamCreate" } } }
         },
-        "responses": {
-          "201": {
-            "description": "Creado"
-          }
-        }
+        "responses": { "201": { "description": "Creado" } }
       }
     },
+
     "/api/teams/{id}": {
       "get": {
         "summary": "Obtener equipo",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "No encontrado"
-          }
-        }
+        "responses": { "200": { "description": "OK" }, "404": { "description": "No encontrado" } }
       },
       "put": {
         "summary": "Actualizar equipo",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TeamUpdate"
-              }
-            }
-          }
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TeamUpdate" } } }
         },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "responses": { "200": { "description": "Actualizado" } }
       },
       "delete": {
         "summary": "Eliminar equipo",
         "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
-        "responses": {
-          "200": {
-            "description": "Eliminado"
-          }
-        }
+        "responses": { "200": { "description": "Eliminado" } }
       }
     },
+
     "/api/teams/auto-enroll": {
       "post": {
-        "summary": "Auto-matrícula: agrega jugador a un equipo aleatorio con cupo (<8) en el deporte indicado",
+        "summary": "Auto-matrícula: agrega un jugador a un equipo con cupo (<8)",
         "requestBody": {
           "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AutoEnroll"
-              }
-            }
-          }
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AutoEnroll" } } }
         },
+        "responses": { "200": { "description": "Jugador inscrito" }, "409": { "description": "Sin cupos" } }
+      }
+    },
+
+    "/api/matches": {
+      "get": { "summary": "Listar partidos", "responses": { "200": { "description": "OK" } } },
+      "post": {
+        "summary": "Crear partido",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MatchCreate" } } }
+        },
+        "responses": { "201": { "description": "Partido creado" } }
+      }
+    },
+
+    "/api/matches/{id}": {
+      "get": {
+        "summary": "Obtener partido por ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": { "200": { "description": "OK" }, "404": { "description": "No encontrado" } }
+      },
+      "put": {
+        "summary": "Actualizar partido",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MatchUpdate" } } }
+        },
+        "responses": { "200": { "description": "Actualizado" } }
+      },
+      "delete": {
+        "summary": "Eliminar partido",
+        "responses": { "200": { "description": "Eliminado" } }
+      }
+    },
+
+    "/api/matches/{id}/score": {
+      "put": {
+        "summary": "Actualizar marcador del partido",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ScoreUpdate" } } }
+        },
+        "responses": { "200": { "description": "Marcador actualizado" } }
+      }
+    },
+
+    "/api/matches/{matchId}/goals": {
+      "post": {
+        "summary": "Registrar gol en un partido",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GoalCreate" } } }
+        },
+        "responses": { "201": { "description": "Gol registrado" } }
+      }
+    },
+
+    "/api/matches/{matchId}/goals/{goalId}": {
+      "put": {
+        "summary": "Editar gol",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GoalEdit" } } }
+        },
+        "responses": { "200": { "description": "Gol editado" } }
+      },
+      "delete": {
+        "summary": "Eliminar gol",
+        "responses": { "200": { "description": "Gol eliminado" } }
+      }
+    },
+
+    "/api/matches/{id}/round": {
+      "put": {
+        "summary": "Actualizar ronda del partido",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoundUpdate" } } }
+        },
+        "responses": { "200": { "description": "Ronda actualizada" } }
+      }
+    },
+
+    "/api/tournament/generarpartidosfutsal": {
+      "post": {
+        "summary": "Genera OCTAVOS automáticamente (16 equipos emparejados aleatoriamente)",
+        "responses": { "201": { "description": "Partidos creados" }, "400": { "description": "Error" } }
+      }
+    },
+
+    "/api/tournament/generarcuartosfutsal": {
+      "post": {
+        "summary": "Genera CUARTOS automáticamente usando ganadores de octavos",
+        "responses": { "201": { "description": "Cuartos generados" }, "400": { "description": "Error" } }
+      }
+    },
+
+    "/api/tournament/generarsemisfutsal": {
+      "post": {
+        "summary": "Genera SEMIS automáticamente usando ganadores de cuartos",
+        "responses": { "201": { "description": "Semis generadas" }, "400": { "description": "Error" } }
+      }
+    },
+
+    "/api/tournament/generarfinalfutsal": {
+      "post": {
+        "summary": "Genera FINAL automáticamente usando ganadores de semifinales",
+        "responses": { "201": { "description": "Final generada" }, "400": { "description": "Error" } }
+      }
+    },
+
+    "/api/tournament/partidosfutsal": {
+      "get": {
+        "summary": "Lista los partidos de microfútbol (formato simple)",
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "409": {
-            "description": "Sin cupos"
+            "description": "Listado de partidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/MatchSimple" }
+                }
+              }
+            }
           }
         }
       }
     }
   },
+
   "components": {
     "schemas": {
       "Sport": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "color": {
-            "type": "string"
-          },
-          "icon": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "color": { "type": "string" },
+          "icon": { "type": "string" }
         },
-        "required": [
-          "name"
-        ]
+        "required": ["name"]
       },
+
       "Player": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "idNumber": {
-            "type": "string"
-          },
-          "program": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "idNumber": { "type": "string" },
+          "program": { "type": "string" },
+          "email": { "type": "string" }
         },
-        "required": [
-          "name",
-          "idNumber"
-        ]
+        "required": ["name", "idNumber"]
       },
+
       "TeamCreate": {
         "type": "object",
         "properties": {
-          "sport": {
-            "type": "string"
-          },
-          "sportName": {
-            "type": "string"
-          },
-          "teamName": {
-            "type": "string"
-          },
-          "captainName": {
-            "type": "string"
-          },
-          "captainId": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
+          "sport": { "type": "string" },
+          "sportName": { "type": "string" },
+          "teamName": { "type": "string" },
+          "captainName": { "type": "string" },
+          "captainId": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string" },
           "players": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Player"
-            }
+            "items": { "$ref": "#/components/schemas/Player" }
           }
         },
-        "required": [
-          "teamName",
-          "captainName",
-          "captainId",
-          "phone",
-          "email"
-        ]
+        "required": ["teamName", "captainName", "captainId", "phone", "email"]
       },
+
       "TeamUpdate": {
         "type": "object",
         "properties": {
-          "teamName": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
+          "teamName": { "type": "string" },
+          "phone": { "type": "string" },
+          "email": { "type": "string" },
           "players": {
             "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Player"
-            }
+            "items": { "$ref": "#/components/schemas/Player" }
           }
         }
       },
+
       "AutoEnroll": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "idNumber": {
-            "type": "string"
-          },
-          "program": {
-            "type": "string"
-          },
-          "sport": {
-            "type": "string",
-            "description": "ObjectId del deporte (opcional si se pasa sportName)"
-          },
-          "sportName": {
-            "type": "string",
-            "description": "Nombre del deporte, ej. 'Baloncesto'"
-          },
-          "email": {
-            "type": "string"
-          }
+          "name": { "type": "string" },
+          "idNumber": { "type": "string" },
+          "program": { "type": "string" },
+          "sport": { "type": "string" },
+          "sportName": { "type": "string" },
+          "email": { "type": "string" }
         },
-        "required": [
-          "name",
-          "idNumber",
-          "program"
-        ]
+        "required": ["name", "idNumber", "program"]
+      },
+
+      "MatchCreate": {
+        "type": "object",
+        "properties": {
+          "sport": { "type": "string" },
+          "round": {
+            "type": "string",
+            "enum": ["OCTAVOS", "CUARTOS", "SEMIS", "FINAL"]
+          },
+          "teamA": { "type": "string" },
+          "teamB": { "type": "string" }
+        },
+        "required": ["sport", "round", "teamA", "teamB"]
+      },
+
+      "MatchUpdate": {
+        "type": "object",
+        "properties": {
+          "round": { "type": "string" },
+          "teamA": { "type": "string" },
+          "teamB": { "type": "string" },
+          "sport": { "type": "string" },
+          "playedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+
+      "ScoreUpdate": {
+        "type": "object",
+        "properties": {
+          "scoreA": { "type": "integer" },
+          "scoreB": { "type": "integer" }
+        },
+        "required": ["scoreA", "scoreB"]
+      },
+
+      "GoalCreate": {
+        "type": "object",
+        "properties": {
+          "playerId": { "type": "string" },
+          "playerName": { "type": "string" },
+          "team": { "type": "string", "enum": ["A", "B"] },
+          "minute": { "type": "integer" }
+        },
+        "required": ["playerId", "playerName", "team", "minute"]
+      },
+
+      "GoalEdit": {
+        "type": "object",
+        "properties": {
+          "minute": { "type": "integer" },
+          "playerName": { "type": "string" }
+        }
+      },
+
+      "RoundUpdate": {
+        "type": "object",
+        "properties": {
+          "round": { "type": "string", "enum": ["OCTAVOS", "CUARTOS", "SEMIS", "FINAL"] }
+        },
+        "required": ["round"]
+      },
+
+      "MatchSimple": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "partidoEtapa": { "type": "string" },
+          "equipo1": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "nombre": { "type": "string" }
+            }
+          },
+          "equipo2": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "nombre": { "type": "string" }
+            }
+          },
+          "score1": { "type": "integer" },
+          "score2": { "type": "integer" },
+          "fecha": { "type": "string", "format": "date-time" },
+          "pasaSemi": { "type": ["integer", "null"] }
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Users, UserPlus } from "lucide-react";
+import { Users } from "lucide-react";
 import { motion } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -49,8 +49,13 @@ export const Teams = () => {
   ========================================================= */
   const sportStyles = {
     microfutbol: {
-      label: "Microfútbol",
+      label: "Microfútbol Masculino",
       color: "from-green-500 to-emerald-700",
+      icon: "⚽",
+    },
+    microfutbolfemenino: {
+      label: "Microfútbol Femenino",
+      color: "from-pink-500 to-rose-700",
       icon: "⚽",
     },
     baloncesto: {
@@ -65,8 +70,13 @@ export const Teams = () => {
     },
   };
 
-  // Normaliza texto: minúsculas, sin espacios ni guiones
-  const normalize = (str) => str?.toLowerCase().replace(/\s|-/g, "") || "";
+  // Normaliza texto: minúsculas, sin espacios, sin guiones, sin tildes
+  const normalize = (str) =>
+    str
+      ?.toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s|-/g, "") || "";
 
   const sport = sportStyles[selectedSport] || {
     label: selectedSport,
@@ -92,9 +102,11 @@ export const Teams = () => {
         >
           <Users className="w-10 h-10 text-white" />
         </div>
+
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
           Tabla de Equipos
         </h1>
+
         <p className="text-gray-600">
           Equipos registrados en {sport.label} {sport.icon}
         </p>
@@ -115,17 +127,6 @@ export const Teams = () => {
             </button>
           ))}
         </div>
-
-        {/* ===== Botón Auto-enroll ===== */}
-        <motion.button
-          onClick={() => setAutoEnrollModal(true)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-800 text-white font-semibold shadow-md hover:shadow-lg transition"
-        >
-          <UserPlus className="w-5 h-5" />
-          Participar Individualmente
-        </motion.button>
       </div>
 
       {/* ===== Tabla de equipos ===== */}
@@ -146,7 +147,7 @@ export const Teams = () => {
         />
       )}
 
-      {/* ===== Modal de auto-inscripción ===== */}
+      {/* ===== Modal auto-enroll (solo si se abre desde otra parte) ===== */}
       {autoEnrollModal && (
         <AutoEnrollModal
           sports={sports}

@@ -1,4 +1,4 @@
-import { Home, ClipboardList, Users, MessageSquare } from 'lucide-react';
+import { Home, Users, MessageSquare, Trophy } from 'lucide-react';
 import { useNavigation } from '../context/NavigationContext';
 
 export const Navbar = () => {
@@ -6,9 +6,10 @@ export const Navbar = () => {
 
   const navItems = [
     { id: 'home' as const, label: 'Inicio', icon: Home },
-    { id: 'register' as const, label: 'Inscribirse', icon: ClipboardList },
+    // { id: 'register' as const, label: 'Inscribirse', icon: ClipboardList },  // ❌ OCULTO
     { id: 'teams' as const, label: 'Equipos', icon: Users },
-    { id: 'soporte' as const, label: 'Soporte', icon: MessageSquare }, // <-- NUEVO
+    { id: 'torneo' as const, label: 'Torneo', icon: Trophy },
+    { id: 'soporte' as const, label: 'Soporte', icon: MessageSquare },
   ];
 
   return (
@@ -17,9 +18,9 @@ export const Navbar = () => {
         <div className="flex justify-between items-center h-16">
 
           {/* LOGO */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigateTo('home')}>
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center overflow-hidden">
-              <img src="./logo2.jpg" alt="" className="object-cover w-full h-full rounded-lg" />
+              <img src="./logo2.jpg" alt="Logo" className="object-cover w-full h-full rounded-lg" />
             </div>
             <span className="text-xl font-bold text-gray-800">
               Egresados Leyendas

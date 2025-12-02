@@ -5,15 +5,13 @@ import gsap from "gsap";
 import { ChevronRight, Trophy, Users, Calendar } from "lucide-react";
 import { useNavigation } from "../context/NavigationContext";
 import "./Home.css";
-
+import EventBanner from "../components/EventBanner";
 interface Sport {
   name: string;
   description: string;
   image: string;
 }
 
-// ✅ Lazy initializer: evita que React pinte la intro antes de leer localStorage.
-//    Así prevenimos el "flash" de la animación por unos segundos.
 const getInitialShowHero = (): boolean => {
   try {
     if (typeof window === "undefined") return false;
@@ -25,12 +23,9 @@ const getInitialShowHero = (): boolean => {
 
 export const Home: React.FC = () => {
   const { navigateTo } = useNavigation();
-
-  // ✅ showHero inicia en true si ya se reprodujo la intro antes.
   const [showHero, setShowHero] = useState<boolean>(getInitialShowHero);
   const [isVisible, setIsVisible] = useState(false);
 
-  // 🔒 Asegura que no hay flash por hidración: refuerza estado antes del primer paint.
   useLayoutEffect(() => {
     try {
       const played = localStorage.getItem("introPlayed") === "true";
@@ -42,7 +37,6 @@ export const Home: React.FC = () => {
     setIsVisible(true);
   }, []);
 
-  // Refs
   const introRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const sweepRef = useRef<HTMLDivElement>(null);
@@ -65,16 +59,15 @@ export const Home: React.FC = () => {
       name: "Ping Pong",
       description: "Equipos de 1 jugador",
       image:
-        "https://static.wixstatic.com/media/d9a908_9788d245789c4c4b92b72651bf14f704~mv2.jpg/v1/fill/w_752,h_502,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/d9a908_9788d245789c4c4b92b72651bf14f704~mv2.jpg",
+        "https://static.wixstatic.com/media/d9a908_9788d245789c4c4b92b72651bf14f704~mv2.jpg",
     },
   ];
 
-  // ===== INTRO MARVEL-LIKE =====
+  // ===== INTRO =====
   useEffect(() => {
-    // Si ya debe mostrarse el hero, no inicializamos GSAP (evita parpadeos y costos)
     if (showHero) return;
-
     if (!introRef.current) return;
+
     const ctx = gsap.context(() => {
       const panels = gsap.utils.toArray<HTMLElement>(".intro-panel");
       const tl = gsap.timeline({
@@ -86,7 +79,6 @@ export const Home: React.FC = () => {
             ease: "power2.out",
             onComplete: () => {
               setShowHero(true);
-              // Guardar bandera en localStorage para no repetir la intro
               try {
                 localStorage.setItem("introPlayed", "true");
               } catch {}
@@ -141,48 +133,39 @@ export const Home: React.FC = () => {
 
     return () => ctx.revert();
   }, [showHero]);
-  // ===== AUTO FETCH API con reintentos =====
-useEffect(() => {
-  const URL = "https://torneoegresados.onrender.com/";
 
-  const fetchWithRetries = async () => {
-    let attempts = 0;
+  // ===== PING API =====
+  useEffect(() => {
+    const URL = "https://torneoegresados.onrender.com/";
 
-    const tryFetch = async () => {
-      attempts++;
+    const fetchWithRetries = async () => {
+      let attempts = 0;
 
-      try {
-        const res = await fetch(URL, { cache: "no-store" });
-
-        if (res.ok) {
-          console.log("API cargada");
-          return true;
-        } else {
-          throw new Error("Respuesta no OK");
+      const tryFetch = async () => {
+        attempts++;
+        try {
+          const res = await fetch(URL, { cache: "no-store" });
+          if (res.ok) {
+            console.log("API cargada");
+            return true;
+          } else {
+            throw new Error("Respuesta no OK");
+          }
+        } catch (err) {
+          if (attempts < 3) {
+            setTimeout(tryFetch, 45000);
+          }
         }
-      } catch (err) {
-        if (attempts < 3) {
-          console.warn(`Intento ${attempts} fallido. Reintentando en 45s...`);
-          setTimeout(tryFetch, 45000); // 45 segundos
-        } else {
-          console.error("La API no respondió después de 3 intentos.");
-        }
-      }
+      };
+
+      tryFetch();
     };
 
-    tryFetch();
-  };
+    fetchWithRetries();
+    const interval = setInterval(fetchWithRetries, 40 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-  // Llamado inmediato
-  fetchWithRetries();
-
-  // Intervalo normal cada 40 min
-  const interval = setInterval(fetchWithRetries, 40 * 60 * 1000);
-
-  return () => clearInterval(interval);
-}, []);
-
-  // ===== HERO EFFECT =====
   useEffect(() => {
     if (!showHero) return;
     const onMouse = (e: MouseEvent) => {
@@ -197,15 +180,10 @@ useEffect(() => {
 
   return (
     <div className="homepage">
-      {/* ===== INTRO MARVEL ===== */}
+      {/* ===== INTRO ===== */}
       <AnimatePresence>
         {!showHero && (
-          <motion.div
-            className="intro-marvel"
-            ref={introRef}
-            // Seguridad extra contra parpadeo si por alguna razón showHero cambia durante la animación
-            style={{ willChange: "opacity, transform" }}
-          >
+          <motion.div className="intro-marvel" ref={introRef}>
             <div className="intro-sweep" ref={sweepRef} />
             <div className="intro-panels">
               {sports.map((s) => (
@@ -255,86 +233,17 @@ useEffect(() => {
               <p className="hero-subtitle">
                 Vive la pasión, la competencia y la unión deportiva
               </p>
-              <motion.button
-                className="hero-btn shimmer"
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigateTo("register")}
-              >
-                Inscribir Equipo <ChevronRight className="ml-2" />
-              </motion.button>
             </motion.div>
           </section>
 
-          {/* ===== TARJETAS DE DEPORTES ===== */}
-          <section className="sports-section">
-            <h2 className="section-title">Disciplinas Destacadas</h2>
-            <p className="section-subtitle">
-              Explora las categorías del Torneo Leyendas Unimar 2025
-            </p>
-            <div className="sports-grid">
-              {sports.map((sport, i) => (
-                <motion.div
-                  key={sport.name}
-                  className="sport-card"
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.2, duration: 0.8 }}
-                  whileHover={{
-                    scale: 1.05,
-                    rotateY: 5,
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
-                  }}
-                >
-                  <div
-                    className="sport-banner"
-                    style={{ backgroundImage: `url(${sport.image})` }}
-                  ></div>
-                  <div className="sport-info">
-                    <h3>{sport.name}</h3>
-                    <p>{sport.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+          {/* ===== BANNER — SORTEO Y FECHAS ===== */}
+          <section className="mt-16 px-6">
+              <EventBanner />
           </section>
         </>
       )}
 
-      {/* ===== PARTICIPACIÓN INDIVIDUAL ===== */}
-      <motion.section
-        className="mt-16 text-center px-4 md:px-0"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-3xl mx-auto bg-gradient-to-r from-blue-500 to-blue-700 rounded-2xl shadow-lg p-10 text-white relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-            <motion.div
-              className="absolute top-0 left-[-50%] w-full h-full bg-white opacity-10 rotate-12"
-              animate={{ left: ["-50%", "150%"] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </div>
-
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 z-10 relative">
-            ¿Estás solo y quieres participar?
-          </h2>
-          <p className="text-lg md:text-xl mb-6 z-10 relative">
-            ¡No te preocupes! Contamos con un sistema que te asigna automáticamente a un equipo aleatorio para que puedas competir, divertirte y conocer nuevos compañeros.
-          </p>
-          <motion.button
-            className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-lg hover:bg-blue-100 transition-colors z-10 relative"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigateTo("teams")}
-          >
-            Unirme Individualmente
-          </motion.button>
-        </div>
-      </motion.section>
-
+      {/* ===== CARDS ===== */}
       <div
         className={`grid grid-cols-1 md:grid-cols-3 gap-8 transition-all duration-1000 delay-1100 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
